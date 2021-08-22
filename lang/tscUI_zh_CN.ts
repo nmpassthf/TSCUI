@@ -79,4 +79,13 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>TextBrowser</name>
+    <message>
+        <location filename="../widgets/textbrowser.ui" line="14"/>
+        <location filename="../build/tscUI_autogen/include_Debug/ui_textbrowser.h" line="46"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

@@ -93,32 +93,12 @@ void ThreadMgr::changeMaxThread(const unsigned int max) {
 
 void ThreadMgr::onThreadMsg(const QUuid& id, const QStringList& message) {
     // 信息中转
-    emit sendOutMessage(id, message);
+    emit sendOutMessage(id, UIType::MsgT("ThreadMgr", message));
 }
 void ThreadMgr::onThreadDebugMsg(const QUuid& id, const QStringList& message) {
     // 信息中转
-    emit sendDebugMessage(id, message);
+    emit sendDebugMessage(id, UIType::MsgT("DEBUG", message));
 }
-
-// void ThreadMgr::onThreadEvent(WorkerEvent ev) {
-//     if (ev.type == Events::Type::active) {
-//         bool isAtActive = false;
-//         for (auto i : active) {
-//             if (i->uuid == ev.uuid && i->isActive) isAtActive = true;
-//         }
-//         if (!isAtActive) bugCollecter(&ev, 2, "在错误的地方启动了线程");
-//     }
-//     if (ev.type == Events::Type::stop) {
-//         done.enqueue(new WorkerInfo(ev));
-//         bool deleted = active.remove(ev.uuid);
-//         if (deleted)
-//             bugCollecter(&ev, 0, "Object has been moved to done Queue");
-//         else
-//             bugCollecter(&ev, 0, "Object moved to done Queue Failed Not
-//             Found");
-//         emit refresh();
-//     }
-// }
 
 void ThreadMgr::onStart(const QUuid& id) {
     emit sendOutEventStart(id, active[id]);
@@ -140,7 +120,10 @@ void ThreadMgr::onErrored(const QUuid& id) {
     qDebug() << "ERROR IN id=>" << id;
 }
 
-void ThreadMgr::onStopSignal(const QUuid& id) { emit stopThread(id); }
+void ThreadMgr::onStopSignal(const QUuid& id) {
+    watting.clear();
+    emit stopThread(id);
+}
 
 // 添加新的等待队列或者接受到已完成信号后触发此槽函数
 void ThreadMgr::onRefresh() {

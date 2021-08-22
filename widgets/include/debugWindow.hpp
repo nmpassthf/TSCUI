@@ -1,7 +1,8 @@
 #ifndef DEBUGWINDOW_HPP
 #define DEBUGWINDOW_HPP
 
-#include <include/includeQt>
+#include <TSCInclude>
+#include <widgets/textbrowser.hpp>
 
 namespace Ui {
 class DebugWindow;
@@ -15,10 +16,14 @@ class DebugWindowViewItem : public QObject, public QListWidgetItem {
     ~DebugWindowViewItem();
 
    public slots:
-    void updateMessage(const QStringList msg);
+    void storageMessage(UIType::MsgT msg);
 
    public:
-    QString savedMessage;
+    QList<UIType::MsgT *> getAllMessage();
+    QMutex mutex;
+
+   private:
+    QList<UIType::MsgT *> savedMessage;
 };
 
 class DebugWindow : public QDialog {
@@ -28,28 +33,23 @@ class DebugWindow : public QDialog {
     explicit DebugWindow(QWidget *parent = nullptr);
     ~DebugWindow();
 
+   private:
+    Ui::DebugWindow *ui;
+
    public slots:
-    void errorCritical(const QUuid &id, const QStringList &errorMessage);
+    void onDebugMessageIn(const QString &aimLabel, UIType::MsgT msg);
+    void onDebugMessageIn(const QUuid &id, UIType::MsgT msg);
 
-    void printDebugMessage(const QString &label, const QStringList &message);
-    void printDebugMessage(const QUuid &id, const QStringList &message);
-
-    // void printDebugMessageL(const QString &label, const QStringList
-    // &message);
-    void reflush();
+    void reflush(DebugWindowViewItem *item, UIType::MsgT msg);
 
     virtual void resizeEvent(QResizeEvent *);
 
    private:
-    Ui::DebugWindow *ui;
+    // storage Label & DebugWindowViewItem*
+    QHash<QString, DebugWindowViewItem *> items;
+    QThreadPool *pool;
 
-   private slots:
-    void textBrowserAutoScroll();
-
-   private:
-    QHash<QString, DebugWindowViewItem *> labels;
-
-    QTimer *timer;
+    bool isAutoScroll = true;
 };
 
 #endif  // DEBUGWINDOW_HPP

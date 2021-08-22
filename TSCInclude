@@ -1,0 +1,6 @@
+#pragma once
+#include <include/includeQt>
+#include <include/types>
+
+// *Widgets #include <widgets/
+// #include <widgets/textbrowser.hpp>

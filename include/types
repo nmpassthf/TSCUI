@@ -1,0 +1,16 @@
+#pragma once
+#ifndef TSC_TYPES
+#define TSC_TYPES
+#include <include/includeQt>
+
+// *Types
+namespace UIType {
+// message type <message label , messages>
+struct MsgT {
+    const QString label;
+    const QStringList message;
+    MsgT(const QString &, const QStringList &);
+};
+
+}  // namespace UIType
+#endif

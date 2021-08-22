@@ -1,28 +1,6 @@
 #pragma once
+#include <TSCInclude>
 #include <include/ffmpegworker.hpp>
-#include <include/includeQt>
-// #include <include/worker.hpp>
-/*
-    !子线程需继承BaseWorker类
-    *此管理类的：
-        *信号：
-            sendToThread(WorkerEvent)
-            sendToThread(WorkerEvent,WorkerMsg)
-        *槽：
-            onThreadMsg(WorkerMsg);
-            onThreadEvent(WorkerMsg);
-
-    *子线程的：
-        *信号：
-            *message仅用于打印文字至线程对应的缓冲区
-            workMessageOut(WorkerMsg)
-            workEventOut(WorkerEvent)
-
-        *槽：
-            workEventIn(WorkerEvent)
-            用于输入带命令行的事件
-            workEventIn(WorkerEvent,WorkerMsg command)
-*/
 
 class ThreadMgr : public QObject {
     Q_OBJECT
@@ -59,8 +37,8 @@ class ThreadMgr : public QObject {
 
    signals:
     // 从此Obj向外部发送的全体受管理的线程的消息信号接口
-    void sendOutMessage(const QUuid& id, const QStringList& message);
-    void sendDebugMessage(const QUuid& id, const QStringList& message);
+    void sendOutMessage(const QUuid&, UIType::MsgT);
+    void sendDebugMessage(const QUuid&, UIType::MsgT);
 
     void sendOutEventStart(const QUuid& id, const CFFInfo& info);
     void sendOutEventStop(const QUuid& id, const CFFInfo& info);

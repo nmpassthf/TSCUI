@@ -2,28 +2,45 @@
 
 #include <widgets/include/debugWindow.hpp>
 
-DebugWindowViewItem::DebugWindowViewItem(QWidget *parent) : QObject(parent) {}
-DebugWindowViewItem::~DebugWindowViewItem() {}
+// -------------------------------------------------------------
 
-void DebugWindowViewItem::updateMessage(const QStringList msg) {
-    for (auto &i : msg) {
-        savedMessage.append(i + " ");
-    }
-    savedMessage.append("\n");
+DebugWindowViewItem::DebugWindowViewItem(QWidget *parent) : QObject(parent) {}
+DebugWindowViewItem::~DebugWindowViewItem() {
+    for (auto i : savedMessage) delete i;
+}
+
+void DebugWindowViewItem::storageMessage(UIType::MsgT msg) {
+    QMutexLocker locker(&mutex);
+    savedMessage.append(new UIType::MsgT(msg));
+}
+
+QList<UIType::MsgT *> DebugWindowViewItem::getAllMessage() {
+    return savedMessage;
 }
 
 // -------------------------------------------------------------
 
 DebugWindow::DebugWindow(QWidget *parent)
-    : QDialog(parent), ui(new Ui::DebugWindow), timer(new QTimer(this)) {
+    : QDialog(parent), ui(new Ui::DebugWindow), pool(new QThreadPool(this)) {
     ui->setupUi(this);
     ui->listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    timer->start(500);
 
-    // connect(ui->debugOutConsole, &QTextBrowser::textChanged, this,
-    //         &DebugWindow::textBrowserAutoScroll);
-    connect(timer, &QTimer::timeout, this, &DebugWindow::reflush);
-    connect(timer, &QTimer::timeout, this, &DebugWindow::textBrowserAutoScroll);
+    connect(ui->listWidget, &QListWidget::itemClicked,
+            [&]() { ui->debugOutConsole->setAutoScroll(true); });
+
+    connect(ui->listWidget, &QListWidget::itemClicked, ui->debugOutConsole,
+            &TextBrowser::doScroll);
+
+    connect(ui->listWidget, &QListWidget::itemClicked, [&]() {
+        auto item =
+            static_cast<DebugWindowViewItem *>(ui->listWidget->currentItem());
+        ui->debugOutConsole->setText("");
+        {
+            QMutexLocker locker(&item->mutex);
+            for (auto i : item->getAllMessage())
+                ui->debugOutConsole->setAppendFormated(*i);
+        }
+    });
 
     setGeometry(0, 0, 900, 600);
     move(0, 0);
@@ -32,55 +49,38 @@ DebugWindow::DebugWindow(QWidget *parent)
 
 DebugWindow::~DebugWindow() { delete ui; }
 
-void DebugWindow::errorCritical(const QUuid &id,
-                                const QStringList &errorMessage) {
-    QMessageBox::critical(this, "CNM,CNM！又写Bug出来了！！！！",
-                          "工头喊一嗓子，加班加班");
-}
+void DebugWindow::onDebugMessageIn(const QString &aimLabel, UIType::MsgT msg) {
+    auto *item = items.value(aimLabel, nullptr);
 
-void DebugWindow::printDebugMessage(const QString &label,
-                                    const QStringList &message) {
-    auto *item = labels.value(label, nullptr);
-
-    if (item != nullptr) {
-        item->updateMessage(message);
-    } else {
+    // 如果目标项不存在，new
+    if (item == nullptr) {
         item = new DebugWindowViewItem(this);
-        item->setText(label);
-        labels.insert(label, item);
+        item->setText(aimLabel);
+        items.insert(aimLabel, item);
         ui->listWidget->addItem(item);
+    }
 
-        item->updateMessage(message);
+    // 存储新送达的消息
+    item->storageMessage(msg);
+    // 刷新显示
+    reflush(item, msg);
+}
+void DebugWindow::onDebugMessageIn(const QUuid &id, UIType::MsgT msg) {
+    onDebugMessageIn(id.toString(), msg);
+}
+
+void DebugWindow::reflush(DebugWindowViewItem *item, UIType::MsgT msg) {
+    // 如果送达项与当前项相符，append新项
+    if (item == ui->listWidget->currentItem()) {
+        ui->debugOutConsole->setAppendFormated(msg);
     }
 }
-void DebugWindow::printDebugMessage(const QUuid &id,
-                                    const QStringList &message) {
-    printDebugMessage(id.toString(), message);
-}
-
-// void DebugWindow::printDebugMessageL(const QString &label,
-//                                      const QStringList &message) {
-//     if (labels.value(label, nullptr) != nullptr) {
-//         labels[label]->updateMessage(message);
-//     } else {
-//         DebugWindowViewItem *item = new DebugWindowViewItem(this);
-//         labels.insert(label, item);
-//         item->setText(label);
-//         ui->listWidget->addItem(labels[label]);
-//         item->updateMessage(message);
-//     }
-
-//     ui->listWidget->setCurrentItem(labels.value(label, 0));
+// void DebugWindow::reflushUpdate(const QString &upd, const QString &label) {
+//     if (ui->listWidget->currentItem() != nullptr)
+//         if (ui->listWidget->currentItem()->text() == label) {
+//             ui->debugOutConsole->insertPlainText(upd);
+//         }
 // }
-
-void DebugWindow::reflush() {
-    DebugWindowViewItem *item =
-        (DebugWindowViewItem *)ui->listWidget->currentItem();
-
-    if (item != nullptr) {
-        ui->debugOutConsole->setText(item->savedMessage);
-    }
-}
 
 void DebugWindow::resizeEvent(QResizeEvent *event) {
     this->setUpdatesEnabled(false);
@@ -95,10 +95,4 @@ void DebugWindow::resizeEvent(QResizeEvent *event) {
         eventSize.width() - ui->listWidget->geometry().width() - 3,
         eventSize.height());
     this->setUpdatesEnabled(true);
-}
-
-void DebugWindow::textBrowserAutoScroll() {
-    QTextCursor tCur(ui->debugOutConsole->textCursor());
-    tCur.movePosition(QTextCursor::End);
-    ui->debugOutConsole->setTextCursor(tCur);
 }

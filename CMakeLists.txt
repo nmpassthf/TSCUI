@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5)
 
 project(tscUI VERSION 0.1 LANGUAGES CXX)
 
@@ -32,9 +32,12 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets LinguistTools REQUIRED)
 
 
 set(MAIN_FILES
+    TSCInclude
 
-    include/hs.h
+    include/types
     include/includeQt
+    include/hs.h
+
     include/mainwindow.hpp
     include/ffmpegworker.hpp
     include/worker.hpp
@@ -46,6 +49,8 @@ set(MAIN_FILES
     src/worker.cpp
     src/threadMgr.cpp
 
+    src/types.cpp
+
 
     res/assets.qrc
     res/res.rc
@@ -55,8 +60,6 @@ set(MAIN_FILES
 
     widgets/include/debugWindow.hpp
     widgets/src/debugWindow.cpp
-
-
 )
 
 qt6_wrap_ui(ui_FILES
@@ -65,7 +68,7 @@ qt6_wrap_ui(ui_FILES
 )
 
 set(WEDGETS_FILES
-    
+    widgets/textbrowser.hpp widgets/textbrowser.cpp
 )
 
 set(TS_FILES

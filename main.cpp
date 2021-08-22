@@ -1,6 +1,4 @@
-﻿#include <include/hs.h>
-
-#include <include/includeQt>
+﻿#include <TSCInclude>
 
 #include "include/mainwindow.hpp"
 

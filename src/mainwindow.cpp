@@ -2,45 +2,19 @@
 
 #include "./ui_mainwindow.h"
 
-// zhenghuo::zhenghuo(QWidget* parent) {
-//     setMouseTracking(true);
-//     setFixedSize(600, 600);
-//     startTimer(1);
-// }
-// void zhenghuo::mouseMoveEvent(QMouseEvent* event) {
-//     move(event->globalPos() - QPoint(300, 300));
-//     raise();
-//     activateWindow();
-//     HWND hForgroundWnd = GetForegroundWindow();
-//     DWORD dwForeID = ::GetWindowThreadProcessId(hForgroundWnd, NULL);
-//     DWORD dwCurID = ::GetCurrentThreadId();
-
-//     ::AttachThreadInput(dwCurID, dwForeID, TRUE);
-//     ::SetForegroundWindow((HWND)winId());
-//     ::AttachThreadInput(dwCurID, dwForeID, FALSE);
-// }
-// void zhenghuo::timerEvent(QTimerEvent* e) {
-//     raise();
-//     activateWindow();
-//     HWND hForgroundWnd = GetForegroundWindow();
-//     DWORD dwForeID = ::GetWindowThreadProcessId(hForgroundWnd, NULL);
-//     DWORD dwCurID = ::GetCurrentThreadId();
-
-//     ::AttachThreadInput(dwCurID, dwForeID, TRUE);
-//     ::SetForegroundWindow((HWND)winId());
-//     ::AttachThreadInput(dwCurID, dwForeID, FALSE);
-// }
-
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), mgr(this) {
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
-    mgr.addWorkerLater(mkCFFInfo());
+    {
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+        mgr.addWorkerLater(mkCFFInfo());
+    }
+
     ui->setupUi(this);
 
     connect(ui->stop, &QPushButton::clicked,
@@ -51,10 +25,9 @@ MainWindow::MainWindow(QWidget* parent)
     debugWindow = new DebugWindow(this);
     connect(debugWindow, &QDialog::finished, &exit);
 
-    connect(
-        &mgr, &ThreadMgr::sendDebugMessage, debugWindow,
-        static_cast<void (DebugWindow::*)(const QUuid&, const QStringList&)>(
-            &DebugWindow::printDebugMessage));
+    connect(&mgr, &ThreadMgr::sendDebugMessage, debugWindow,
+            static_cast<void (DebugWindow::*)(const QUuid&, UIType::MsgT)>(
+                &DebugWindow::onDebugMessageIn));
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -68,7 +41,8 @@ void MainWindow::dropEvent(QDropEvent* event) {
     for (auto i : droppedFiles) {
         list.append(i.toString());
     }
-    debugWindow->printDebugMessage("Drop Event", list);
+    debugWindow->onDebugMessageIn("Drop Event",
+                                  UIType::MsgT("DropEvent", list));
 }
 
 // bool MainWindow::createProcessWithOutput() {

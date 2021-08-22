@@ -16,7 +16,7 @@
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <widget class="QTextBrowser" name="debugOutConsole">
+  <widget class="TextBrowser" name="debugOutConsole">
    <property name="geometry">
     <rect>
      <x>215</x>
@@ -65,6 +65,13 @@ p, li { white-space: pre-wrap; }
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header location="global">widgets\textbrowser.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

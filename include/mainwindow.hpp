@@ -3,9 +3,8 @@
 
 #include <include/hs.h>
 
-#include <include/includeQt>
+#include <TSCInclude>
 #include <include/threadMgr.hpp>
-// #include <include/worker.hpp>
 #include <widgets/include/debugWindow.hpp>
 
 QT_BEGIN_NAMESPACE

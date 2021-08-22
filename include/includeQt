@@ -1,6 +1,7 @@
 #pragma once
 #define DEBUG
 
+// *Q Includes
 #include <QApplication>
 #include <QByteArray>
 #include <QCursor>
@@ -19,7 +20,7 @@
 #include <QMap>
 #include <QMessageBox>
 #include <QMimeData>
-#include <QMutexLocker>
+#include <QMutex>
 #include <QObject>
 #include <QPair>
 #include <QProcess>
