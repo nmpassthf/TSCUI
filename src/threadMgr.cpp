@@ -1,7 +1,7 @@
-#include <include/threadMgr.hpp>
+﻿#include <include/threadMgr.hpp>
 
 ThreadMgr::ThreadMgr(QObject* parent, unsigned int maxThread)
-    : QObject(parent), pool(new QThreadPool(this)), maxThread(maxThread) {
+    : QObject(parent), maxThread(maxThread), pool(new QThreadPool(this)) {
     connect(this, &ThreadMgr::refresh, &ThreadMgr::onRefresh);
 }
 ThreadMgr::~ThreadMgr() {
@@ -29,28 +29,27 @@ ThreadMgr::~ThreadMgr() {
 
 void ThreadMgr::debugPrintQueue() {
 #ifdef DEBUG
-    qDebug() << "\t\t列表长度为=>" << watting.count() << ";" << active.count()
-             << ";" << done.count();
-    qDebug() << "列表信息=>";
+//    qDebug() << "\t\t列表长度为=>" << watting.count() << ";" << active.count()
+//             << ";" << done.count();
+//    qDebug() << "列表信息=>";
 
-    qDebug() << "\tWATTING QUEUE=>\t\t\t";
-    for (auto i : watting) {
-        qDebug() << "\t\t\t" << i.first.absoluteFilePath() << " "
-                 << i.second.absolutePath() << "\t\t\t";
-    }
-    qDebug() << "\tACTIVE QUEUE=>\t\t\t";
-    for (auto i : active.keys()) {
-        qDebug() << "\t\t\t" << i.toString() << " "
-                 << active[i].first.absoluteFilePath() << " "
-                 << active[i].second.absolutePath() << "\t\t\t";
-    }
-    qDebug() << "\tDONE QUEUE=>\t\t\t";
-    for (auto i : done.keys()) {
-        qDebug() << "\t\t\t" << i.toString() << " "
-                 << done[i].first.absoluteFilePath() << " "
-                 << done[i].second.absolutePath() << "\t\t\t";
-    }
-
+//    qDebug() << "\tWATTING QUEUE=>\t\t\t";
+//    for (auto &i : watting) {
+//        qDebug() << "\t\t\t" << i.first.absoluteFilePath() << " "
+//                 << i.second.absolutePath() << "\t\t\t";
+//    }
+//    qDebug() << "\tACTIVE QUEUE=>\t\t\t";
+//    for (auto& i : active.keys()) {
+//        qDebug() << "\t\t\t" << i.toString() << " "
+//                 << active[i].first.absoluteFilePath() << " "
+//                 << active[i].second.absolutePath() << "\t\t\t";
+//    }
+//    qDebug() << "\tDONE QUEUE=>\t\t\t";
+//    for (auto &i : done.keys()) {
+//        qDebug() << "\t\t\t" << i.toString() << " "
+//                 << done[i].first.absoluteFilePath() << " "
+//                 << done[i].second.absolutePath() << "\t\t\t";
+//    }
 #endif
 }
 
@@ -59,7 +58,7 @@ auto ThreadMgr::getQQueueScreenshot() -> QList<QHash<const QUuid, CFFInfo>> {
     for (int i = 0; i < 3; ++i) {
         switch (i) {
             case 0:
-                for (auto j : watting) {
+                for (auto &j : watting) {
                     result[i].insert(QUuid(), j);
                 }
                 break;

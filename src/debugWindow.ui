@@ -19,10 +19,10 @@
   <widget class="TextBrowser" name="debugOutConsole">
    <property name="geometry">
     <rect>
-     <x>215</x>
+     <x>470</x>
      <y>0</y>
-     <width>361</width>
-     <height>401</height>
+     <width>111</width>
+     <height>421</height>
     </rect>
    </property>
    <property name="focusPolicy">

@@ -1,4 +1,4 @@
-#include <ui_debugWindow.h>
+﻿#include <ui_debugWindow.h>
 
 #include <include/debugWindow.hpp>
 
@@ -43,7 +43,7 @@ DebugWindow::DebugWindow(QWidget *parent)
     });
 
     setGeometry(0, 0, 900, 600);
-    move(0, 0);
+    move(1000, 0);
     show();
 }
 
