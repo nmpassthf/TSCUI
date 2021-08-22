@@ -1,6 +1,6 @@
 #include <ui_debugWindow.h>
 
-#include <widgets/include/debugWindow.hpp>
+#include <include/debugWindow.hpp>
 
 // -------------------------------------------------------------
 

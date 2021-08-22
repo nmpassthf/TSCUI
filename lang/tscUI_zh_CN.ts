@@ -4,13 +4,13 @@
 <context>
     <name>DebugWindow</name>
     <message>
-        <location filename="../widgets/src/debugWindow.ui" line="14"/>
+        <location filename="../src/debugWindow.ui" line="14"/>
         <location filename="../build/ui_debugWindow.h" line="51"/>
         <source>Debug Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/src/debugWindow.ui" line="50"/>
+        <location filename="../src/debugWindow.ui" line="50"/>
         <location filename="../build/ui_debugWindow.h" line="54"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;

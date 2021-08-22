@@ -39,32 +39,24 @@ set(MAIN_FILES
     include/hs.h
 
     include/mainwindow.hpp
-    include/ffmpegworker.hpp
-    include/worker.hpp
     include/threadMgr.hpp
-
-    src/mainwindow.cpp
-
-    src/ffmpegworker.cpp
-    src/worker.cpp
-    src/threadMgr.cpp
+    include/debugWindow.hpp
+    include/ffmpegworker.hpp
 
     src/types.cpp
 
+    src/mainwindow.cpp
+    src/threadMgr.cpp
+    src/debugWindow.cpp
+    src/ffmpegworker.cpp
 
     res/assets.qrc
     res/res.rc
-
-    widgets/include/tabWig.hpp
-    widgets/src/tabWig.cpp
-
-    widgets/include/debugWindow.hpp
-    widgets/src/debugWindow.cpp
 )
 
 qt6_wrap_ui(ui_FILES
     src/mainwindow.ui
-    widgets/src/debugWindow.ui
+    src/debugWindow.ui
 )
 
 set(WEDGETS_FILES

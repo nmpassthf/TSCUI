@@ -5,7 +5,7 @@
 
 #include <TSCInclude>
 #include <include/threadMgr.hpp>
-#include <widgets/include/debugWindow.hpp>
+#include <include/debugWindow.hpp>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
