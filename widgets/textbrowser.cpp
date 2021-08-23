@@ -6,10 +6,13 @@ TextBrowser::TextBrowser(QWidget *parent, bool isAutoScroll)
       pool(new QThreadPool(this)) {
     pool->setMaxThreadCount(1);
 
-    connect(this, &TextBrowser::textChanged,this,  &TextBrowser::doScroll,Qt::QueuedConnection);
+    connect(this, &TextBrowser::textChanged, this, &TextBrowser::doScroll,
+            Qt::QueuedConnection);
 
-    connect(this, &TextBrowser::appendFormatedDone,this,
-            [=](const QString text) { this->insertPlainText(text); },Qt::QueuedConnection);
+    connect(
+        this, &TextBrowser::appendFormatedDone, this,
+        [=](const QString text) { this->insertPlainText(text); },
+        Qt::QueuedConnection);
 }
 
 TextBrowser::~TextBrowser() { pool->waitForDone(); }
@@ -43,4 +46,19 @@ void TextBrowser::setAppendFormated(UIType::MsgT &msg) {
 
         emit appendFormatedDone(text);
     });
+}
+
+bool TextBrowser::eventFilter(QObject *target, QEvent *e) {
+    if (e->type() == QEvent::Wheel) {
+        auto w = static_cast<QWheelEvent *>(e);
+        if (w->angleDelta().y() > 0) {
+            setAutoScroll(false);
+        }
+        QScrollBar *scrollBar = this->verticalScrollBar();
+        if (scrollBar->sliderPosition() == scrollBar->maximum()) {
+            setAutoScroll(true);
+        }
+    }
+
+    return false;
 }

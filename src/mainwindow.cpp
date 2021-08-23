@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(&mgr, &ThreadMgr::sendDebugMessage, debugWindow,
             static_cast<void (DebugWindow::*)(const QUuid&, UIType::MsgT)>(
                 &DebugWindow::onDebugMessageIn));
+
+    this->raise();
 }
 
 MainWindow::~MainWindow() { delete ui; }

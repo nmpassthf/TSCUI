@@ -4,8 +4,8 @@
 #include <include/hs.h>
 
 #include <TSCInclude>
-#include <include/threadMgr.hpp>
 #include <include/debugWindow.hpp>
+#include <include/threadMgr.hpp>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,15 +35,5 @@ class MainWindow : public QMainWindow {
     // TODO void updateThreadHash(WorkerInfo wkInfo, QObject *threadObjP,
     //                       bool toDelete = true);
 };
-
-// class zhenghuo : public QWidget {
-//     Q_OBJECT
-//    public:
-//     zhenghuo(QWidget *parent);
-
-//    protected:
-//     void mouseMoveEvent(QMouseEvent *event);
-//     void timerEvent(QTimerEvent *);
-// };
 
 #endif  // MAINWINDOW_HPP

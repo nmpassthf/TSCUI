@@ -91,6 +91,7 @@ void FFmpegWorker::run() {
         emit sendDebugMessage(id, dMsg);
 
         if (i > 30) break;
+
         QThread::msleep(500);
     }
 
